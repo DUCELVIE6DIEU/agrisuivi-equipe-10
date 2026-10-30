@@ -66,6 +66,12 @@ export function creerReleve(parcelle, humiditeTexte, temperatureTexte, date) {
 }
 
 // Ajoute le relevé à la fin du fichier JSON, enregistre le fichier,
+export async function ajouterReleve(chemin, releve) {
+  const releves = await lireJson(chemin);
+  releves.push(releve);
+  await ecrireJson(chemin, releves);
+  return releves.length;
+}
 // puis renvoie le nouveau nombre de relevés.
 export async function ajouterReleve(chemin, releve) {
   const releves = await lireJson(chemin);
