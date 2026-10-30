@@ -49,19 +49,13 @@ export async function chargerDonnees(dossier = DOSSIER) {
 }
 // Vérifie les textes tapés dans le terminal et renvoie un nouveau relevé.
 export function creerReleve(parcelle, humiditeTexte, temperatureTexte, date) {
-  if (!parcelle) {
-    throw new Error("Identifiant de parcelle manquant ou invalide");
-  }
+  if (!parcelle) throw new Error("Identifiant de parcelle manquant ou invalide");
 
   const h = Number(humiditeTexte);
   const t = Number(temperatureTexte);
 
-  if (!Number.isFinite(h) || h < 0 || h > 100) {
-    throw new Error(`Humidite invalide : ${humiditeTexte} (0-100 attendu)`);
-  }
-  if (!Number.isFinite(t)) {
-    throw new Error(`Temperature invalide : ${temperatureTexte}`);
-  }
+  if (!Number.isFinite(h) || h < 0 || h > 100) throw new Error(`Humidite invalide : ${humiditeTexte} (0-100 attendu)`);
+  if (!Number.isFinite(t)) throw new Error(`Temperature invalide : ${temperatureTexte}`);
 
   return {
     parcelle: String(parcelle).toUpperCase(),
