@@ -32,3 +32,7 @@ export function bilanRecoltes(parcelles, recoltes, cultures) {
   });
 
   }
+
+export function classerParRevenu(bilan) {
+  return [...bilan].sort((a, b) => b.revenu - a.revenu);
+}
