@@ -30,6 +30,7 @@ export async function ecrireJson(nomFichier, contenu) {
 }
 
 // Lit les quatre fichiers EN MÊME TEMPS avec Promise.all.
+// Lit les quatre fichiers EN MÊME TEMPS avec Promise.all.
 export async function chargerDonnees(dossier = DOSSIER) {
   const [parcelles, cultures, releves, recoltes] = await Promise.all([
     lireJson(path.join(dossier, "parcelles.json")),
@@ -39,7 +40,6 @@ export async function chargerDonnees(dossier = DOSSIER) {
   ]);
   return { parcelles, cultures, releves, recoltes };
 }
-
 // Vérifie les textes tapés dans le terminal et renvoie un nouveau relevé.
 export function creerReleve(parcelle, humiditeTexte, temperatureTexte, date) {
   if (!parcelle) {
