@@ -6,13 +6,6 @@ import path from "node:path";
 
 const DOSSIER = path.join(process.cwd(), "donnees");
 
-export async function ecrireJson(nomFichier, contenu) {
-  const chemin = nomFichier.includes('/') || nomFichier.includes('\\')
-    ? nomFichier
-    : path.join(DOSSIER, nomFichier);
-  await writeFile(chemin, JSON.stringify(contenu, null, 2), "utf8");
-}
-
 // Lit un fichier JSON et renvoie son contenu converti en valeur JavaScript.
 export async function lireJson(nomFichier) {
   const chemin = nomFichier.includes('/') || nomFichier.includes('\\')
@@ -28,6 +21,7 @@ export async function lireJson(nomFichier) {
     throw err;
   }
 }
+
 // Étape 4.4 (PDF) - Écrire dans un fichier JSON
 export async function ecrireJson(nomFichier, contenu) {
   const chemin = nomFichier.includes('/') || nomFichier.includes('\\')
@@ -36,7 +30,6 @@ export async function ecrireJson(nomFichier, contenu) {
   await writeFile(chemin, JSON.stringify(contenu, null, 2), "utf8");
 }
 
-// Lit les quatre fichiers EN MÊME TEMPS avec Promise.all.
 // Lit les quatre fichiers EN MÊME TEMPS avec Promise.all.
 export async function chargerDonnees(dossier = DOSSIER) {
   const [parcelles, cultures, releves, recoltes] = await Promise.all([
@@ -47,15 +40,22 @@ export async function chargerDonnees(dossier = DOSSIER) {
   ]);
   return { parcelles, cultures, releves, recoltes };
 }
+
 // Vérifie les textes tapés dans le terminal et renvoie un nouveau relevé.
 export function creerReleve(parcelle, humiditeTexte, temperatureTexte, date) {
-  if (!parcelle) throw new Error("Identifiant de parcelle manquant ou invalide");
+  if (!parcelle) {
+    throw new Error("Identifiant de parcelle manquant ou invalide");
+  }
 
   const h = Number(humiditeTexte);
   const t = Number(temperatureTexte);
 
-  if (!Number.isFinite(h) || h < 0 || h > 100) throw new Error(`Humidite invalide : ${humiditeTexte} (0-100 attendu)`);
-  if (!Number.isFinite(t)) throw new Error(`Temperature invalide : ${temperatureTexte}`);
+  if (!Number.isFinite(h) || h < 0 || h > 100) {
+    throw new Error(`Humidite invalide : ${humiditeTexte} (0-100 attendu)`);
+  }
+  if (!Number.isFinite(t)) {
+    throw new Error(`Temperature invalide : ${temperatureTexte}`);
+  }
 
   return {
     parcelle: String(parcelle).toUpperCase(),
@@ -66,12 +66,6 @@ export function creerReleve(parcelle, humiditeTexte, temperatureTexte, date) {
 }
 
 // Ajoute le relevé à la fin du fichier JSON, enregistre le fichier,
-export async function ajouterReleve(chemin, releve) {
-  const releves = await lireJson(chemin);
-  releves.push(releve);
-  await ecrireJson(chemin, releves);
-  return releves.length;
-}
 // puis renvoie le nouveau nombre de relevés.
 export async function ajouterReleve(chemin, releve) {
   const releves = await lireJson(chemin);
